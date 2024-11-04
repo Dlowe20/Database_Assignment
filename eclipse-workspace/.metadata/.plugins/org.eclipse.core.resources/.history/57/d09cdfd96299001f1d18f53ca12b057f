@@ -1,0 +1,5 @@
+package jdbcmovies;
+
+public class JDBCMainWindowContent {
+
+}
