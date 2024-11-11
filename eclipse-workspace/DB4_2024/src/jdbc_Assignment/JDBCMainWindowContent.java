@@ -27,26 +27,35 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 
 	private Border lineBorder;
 
-	private JLabel IDLabel=new JLabel("ID:                 ");
-	private JLabel FirstNameLabel=new JLabel("FirstName:               ");
-	private JLabel LastNameLabel=new JLabel("LastName:      ");
-	private JLabel AgeLabel=new JLabel("Age:        ");
-	private JLabel GenderLabel=new JLabel("Gender:                 ");
-	private JLabel PositionLabel=new JLabel("Position:               ");
-	private JLabel DepartmentLabel=new JLabel("Department:      ");
-	private JLabel RateLabel=new JLabel("Rate:      ");
-	private JLabel HoursLabel=new JLabel("Hours:        ");
+	/*
+	private JLabel Mon_NameLabel = new JLabel("Monster_Name:                 ");
+	private JLabel Mon_DmgLabel = new JLabel("Monster_Damage_Scale:               ");
+	private JLabel Mon_ThtLabel = new JLabel("Monster_threat_level:      ");
+	private JLabel FireLabel = new JLabel("Fire_Res:        ");
+	private JLabel WaterLabel = new JLabel("Water_Res:                 ");
+	private JLabel ThunderLabel = new JLabel("Thunder_Res:               ");
+	private JLabel DragonLabel = new JLabel("Dragon_Res:      ");
+	private JLabel IceLabel = new JLabel("Ice_Res:      ");
+	*/
+	
+	private JLabel Mon_NameLabel = new JLabel("Monster_name:        ");
+	private JLabel Mon_TypeLabel = new JLabel("Monster_type:        ");
+	private JLabel DescLabel = new JLabel("Description:        ");
 
-	private JTextField IDTF= new JTextField(10);
-	private JTextField FirstNameTF=new JTextField(10);
-	private JTextField LastNameTF=new JTextField(10);
-	private JTextField AgeTF=new JTextField(10);
-	private JTextField GenderTF=new JTextField(10);
-	private JTextField PositionTF=new JTextField(10);
-	private JTextField DepartmentTF=new JTextField(10);
-	private JTextField RateTF=new JTextField(10);
-	private JTextField HoursTF=new JTextField(10);
-
+	/*
+	private JTextField Mon_NameTF = new JTextField(10);
+	private JTextField Mon_DmgTF = new JTextField(10);
+	private JTextField Mon_ThtTF = new JTextField(10);
+	private JTextField FireTF = new JTextField(10);
+	private JTextField WaterTF = new JTextField(10);
+	private JTextField ThunderTF = new JTextField(10);
+	private JTextField DragonTF = new JTextField(10);
+	private JTextField IceTF = new JTextField(10);
+	*/
+	private JTextField Mon_NameTF = new JTextField(10);
+	private JTextField Mon_TypeTF = new JTextField(10);
+	private JTextField DescTF = new JTextField(10);
+	
 
 	private static QueryTableModel TableModel = new QueryTableModel();
 	//Add the models to JTabels
@@ -87,24 +96,33 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		detailsPanel.setBackground(Color.lightGray);
 		detailsPanel.setBorder(BorderFactory.createTitledBorder(lineBorder, "CRUD Actions"));
 
-		detailsPanel.add(IDLabel);			
-		detailsPanel.add(IDTF);
-		detailsPanel.add(FirstNameLabel);		
-		detailsPanel.add(FirstNameTF);
-		detailsPanel.add(LastNameLabel);		
-		detailsPanel.add(LastNameTF);
-		detailsPanel.add(AgeLabel);	
-		detailsPanel.add(AgeTF);
-		detailsPanel.add(GenderLabel);		
-		detailsPanel.add(GenderTF);
-		detailsPanel.add(PositionLabel);
-		detailsPanel.add(PositionTF);
-		detailsPanel.add(DepartmentLabel);
-		detailsPanel.add(DepartmentTF);
-		detailsPanel.add(RateLabel);
-		detailsPanel.add(RateTF);
-		detailsPanel.add(HoursLabel);
-		detailsPanel.add(HoursTF);
+		/*
+		detailsPanel.add(Mon_NameLabel);			
+		detailsPanel.add(Mon_DmgLabel);
+		detailsPanel.add(Mon_ThtLabel);		
+		detailsPanel.add(FireLabel);	
+		detailsPanel.add(WaterLabel);		
+		detailsPanel.add(ThunderLabel);
+		detailsPanel.add(DragonLabel);
+		detailsPanel.add(IceLabel);
+		*/
+		detailsPanel.add(Mon_NameLabel);
+		detailsPanel.add(Mon_TypeLabel);
+		detailsPanel.add(DescLabel);
+		
+		/*
+		detailsPanel.add(Mon_NameTF);		
+		detailsPanel.add(Mon_DmgTF);
+		detailsPanel.add(Mon_ThtTF);
+		detailsPanel.add(FireTF);
+		detailsPanel.add(WaterTF);
+		detailsPanel.add(ThunderTF);
+		detailsPanel.add(DragonTF);
+		detailsPanel.add(IceTF);
+		*/
+		detailsPanel.add(Mon_NameTF);
+		detailsPanel.add(Mon_TypeTF);
+		detailsPanel.add(DescTF);
 
 		//setup details panel and add the components to it
 		exportButtonPanel=new JPanel();
@@ -177,7 +195,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 			// Load the JConnector Driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// Specify the DB Name
-            String url="jdbc:mysql://localhost:3306/db4_MH";
+            String url="jdbc:mysql://localhost:3306/db4_mh";
 			
 			// Connect to DB using DB URL, Username and password
 			con = DriverManager.getConnection(url, "root", "");
@@ -197,26 +215,46 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		Object target=e.getSource();
 		if (target == clearButton)
 		{
-			IDTF.setText("");
-			FirstNameTF.setText("");
-			LastNameTF.setText("");
-			AgeTF.setText("");
-			GenderTF.setText("");
-			PositionTF.setText("");
-			DepartmentTF.setText("");
-			RateTF.setText("");
+			/*
+			Mon_NameTF.setText("");
+			Mon_DmgTF.setText("");
+			Mon_ThtTF.setText("");
+			FireTF.setText("");
+			WaterTF.setText("");
+			ThunderTF.setText("");
+			DragonTF.setText("");
+			IceTF.setText("");
 			HoursTF.setText("");
-
+			*/
+			Mon_NameTF.setText("");
+			Mon_TypeTF.setText("");
+			DescTF.setText("");
+			
 		}
 
 		if (target == insertButton)
 		{		 
 			try
 			{
-				String updateTemp ="INSERT INTO details VALUES("+
-				null +",'"+FirstNameTF.getText()+"','"+LastNameTF.getText()+"',"+AgeTF.getText()+",'"+GenderTF.getText()+"','"
-				+PositionTF.getText()+"','"+DepartmentTF.getText()+"',"+RateTF.getText()+","+HoursTF.getText()+");";
-
+				/*
+				String updateTemp ="INSERT INTO elements"
+						+ "VALUES("+",'" + Mon_NameTF.getText() + ",'" + FireTF.getText() + "','" + WaterTF.getText() +
+						"','" + ThunderTF.getText() + "',"+DragonTF.getText() + ","+IceTF.getText() + ");";
+				*/
+				/*
+				String updateTemp = "INSERT INTO monster VALUES('"
+						+ Mon_NameTF.getText() + "','"
+						+ FireTF.getText() + "','"
+						+ WaterTF.getText() + "','"
+						+ ThunderTF.getText() + "','"
+						+ DragonTF.getText() + "','"
+						+ IceTF.getText() + "')";
+				*/
+				String updateTemp = "INSERT INTO monster VALUES('"
+					    + Mon_NameTF.getText() + "','"
+					    + Mon_TypeTF.getText() + "','"
+					    + DescTF.getText() + "')";
+				
 				stmt.executeUpdate(updateTemp);
 
 			}
@@ -229,8 +267,68 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 				TableModel.refreshFromDB(stmt);
 			}
 		}
+		
+		/////////////////////////////////////////////////////////////////////////////////////
+		//Delete operation
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		if (target == deleteButton)
+		{		 
+			try
+			{
+				String DeleteQuery = "delete from monster where monster_name = '"
+						+ Mon_NameTF.getText() + "'";
+				
 
+						
+						
+					   // + Mon_NameTF.getText() + "','"
+					   // + Mon_TypeTF.getText() + "','"
+					   // + DescTF.getText() + "')";
+				
+				stmt.executeUpdate(DeleteQuery);
 
+			}
+			catch (SQLException sqle)
+			{
+				System.err.println("Error with  insert:\n"+sqle.toString());
+			}
+			finally
+			{
+				TableModel.refreshFromDB(stmt);
+			}
+		}
+		
+		/////////////////////////////////////////////////////////////////////////////////////
+		//Update operation
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		if (target == deleteButton)
+		{		 
+			try
+			{
+				String DeleteQuery = "delete from monster where monster_name = '"
+						+ Mon_NameTF.getText() + "'";
+				
+
+						
+						
+					   // + Mon_NameTF.getText() + "','"
+					   // + Mon_TypeTF.getText() + "','"
+					   // + DescTF.getText() + "')";
+				
+				stmt.executeUpdate(DeleteQuery);
+
+			}
+			catch (SQLException sqle)
+			{
+				System.err.println("Error with  insert:\n"+sqle.toString());
+			}
+			finally
+			{
+				TableModel.refreshFromDB(stmt);
+			}
+		}
 		/////////////////////////////////////////////////////////////////////////////////////
 		//I have only added functionality of 2 of the button on the lower right of the template
 		///////////////////////////////////////////////////////////////////////////////////

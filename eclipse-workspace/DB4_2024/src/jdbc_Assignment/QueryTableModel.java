@@ -53,7 +53,18 @@ public class QueryTableModel extends AbstractTableModel{
 		stmt = stmt1;
 		try{
 			//Execute the query and store the result set and its metadata
-			rs = stmt.executeQuery("SELECT * FROM Details");
+			
+			/*
+			rs = stmt.executeQuery("SELECT ms.Monster_name, ms.Monster_dmg, ms.Monster_threat\r\n"
+									+ ", e.Fire, e.Water, e.Thunder, e.Dragon, e.Ice\r\n"
+									+ "FROM monster_stats ms\r\n"
+									+ "LEFT JOIN elements e\r\n"
+									+ "ON ms.Monster_name = e.Monster_name;");
+			*/
+			
+			rs = stmt.executeQuery("SELECT * FROM monster");
+			
+			//select * from elements;
 			ResultSetMetaData meta = rs.getMetaData();
 		
 			//to get the number of columns
