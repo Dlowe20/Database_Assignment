@@ -303,21 +303,16 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		//Update operation
 		///////////////////////////////////////////////////////////////////////////////////
 		
-		if (target == deleteButton)
+		if (target == updateButton)
 		{		 
 			try
-			{
-				String DeleteQuery = "delete from monster where monster_name = '"
-						+ Mon_NameTF.getText() + "'";
+			{	
+				String updateQuery = "UPDATE monster SET " +
+	                    "Monster_type='" + Mon_TypeTF.getText() + "', " +
+	                    "Monster_desc='" + DescTF.getText() + "' " + 
+	                    "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
 				
-
-						
-						
-					   // + Mon_NameTF.getText() + "','"
-					   // + Mon_TypeTF.getText() + "','"
-					   // + DescTF.getText() + "')";
-				
-				stmt.executeUpdate(DeleteQuery);
+				stmt.executeUpdate(updateQuery);
 
 			}
 			catch (SQLException sqle)
