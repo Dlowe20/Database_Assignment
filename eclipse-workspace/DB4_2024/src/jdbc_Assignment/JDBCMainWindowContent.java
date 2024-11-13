@@ -27,7 +27,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 
 	private Border lineBorder;
 
-	/*
+	
 	private JLabel Mon_NameLabel = new JLabel("Monster_Name:                 ");
 	private JLabel Mon_DmgLabel = new JLabel("Monster_Damage_Scale:               ");
 	private JLabel Mon_ThtLabel = new JLabel("Monster_threat_level:      ");
@@ -36,13 +36,11 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 	private JLabel ThunderLabel = new JLabel("Thunder_Res:               ");
 	private JLabel DragonLabel = new JLabel("Dragon_Res:      ");
 	private JLabel IceLabel = new JLabel("Ice_Res:      ");
-	*/
 	
-	private JLabel Mon_NameLabel = new JLabel("Monster_name:        ");
 	private JLabel Mon_TypeLabel = new JLabel("Monster_type:        ");
 	private JLabel DescLabel = new JLabel("Description:        ");
 
-	/*
+	
 	private JTextField Mon_NameTF = new JTextField(10);
 	private JTextField Mon_DmgTF = new JTextField(10);
 	private JTextField Mon_ThtTF = new JTextField(10);
@@ -51,8 +49,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 	private JTextField ThunderTF = new JTextField(10);
 	private JTextField DragonTF = new JTextField(10);
 	private JTextField IceTF = new JTextField(10);
-	*/
-	private JTextField Mon_NameTF = new JTextField(10);
+	
 	private JTextField Mon_TypeTF = new JTextField(10);
 	private JTextField DescTF = new JTextField(10);
 	
@@ -96,8 +93,11 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		detailsPanel.setBackground(Color.lightGray);
 		detailsPanel.setBorder(BorderFactory.createTitledBorder(lineBorder, "CRUD Actions"));
 
-		/*
-		detailsPanel.add(Mon_NameLabel);			
+		
+		detailsPanel.add(Mon_NameLabel);
+		//detailsPanel.add(Mon_TypeLabel);
+		//detailsPanel.add(DescLabel);
+		
 		detailsPanel.add(Mon_DmgLabel);
 		detailsPanel.add(Mon_ThtLabel);		
 		detailsPanel.add(FireLabel);	
@@ -105,13 +105,13 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		detailsPanel.add(ThunderLabel);
 		detailsPanel.add(DragonLabel);
 		detailsPanel.add(IceLabel);
-		*/
-		detailsPanel.add(Mon_NameLabel);
-		detailsPanel.add(Mon_TypeLabel);
-		detailsPanel.add(DescLabel);
 		
-		/*
-		detailsPanel.add(Mon_NameTF);		
+		
+		
+		detailsPanel.add(Mon_NameTF);
+		//detailsPanel.add(Mon_TypeTF);
+		//detailsPanel.add(DescTF);
+		
 		detailsPanel.add(Mon_DmgTF);
 		detailsPanel.add(Mon_ThtTF);
 		detailsPanel.add(FireTF);
@@ -119,10 +119,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		detailsPanel.add(ThunderTF);
 		detailsPanel.add(DragonTF);
 		detailsPanel.add(IceTF);
-		*/
-		detailsPanel.add(Mon_NameTF);
-		detailsPanel.add(Mon_TypeTF);
-		detailsPanel.add(DescTF);
+		
 
 		//setup details panel and add the components to it
 		exportButtonPanel=new JPanel();
@@ -215,7 +212,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		Object target=e.getSource();
 		if (target == clearButton)
 		{
-			/*
+			
 			Mon_NameTF.setText("");
 			Mon_DmgTF.setText("");
 			Mon_ThtTF.setText("");
@@ -224,9 +221,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 			ThunderTF.setText("");
 			DragonTF.setText("");
 			IceTF.setText("");
-			HoursTF.setText("");
-			*/
-			Mon_NameTF.setText("");
+	
 			Mon_TypeTF.setText("");
 			DescTF.setText("");
 			
@@ -236,26 +231,28 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		{		 
 			try
 			{
-				/*
-				String updateTemp ="INSERT INTO elements"
-						+ "VALUES("+",'" + Mon_NameTF.getText() + ",'" + FireTF.getText() + "','" + WaterTF.getText() +
-						"','" + ThunderTF.getText() + "',"+DragonTF.getText() + ","+IceTF.getText() + ");";
-				*/
-				/*
-				String updateTemp = "INSERT INTO monster VALUES('"
-						+ Mon_NameTF.getText() + "','"
-						+ FireTF.getText() + "','"
-						+ WaterTF.getText() + "','"
-						+ ThunderTF.getText() + "','"
-						+ DragonTF.getText() + "','"
-						+ IceTF.getText() + "')";
-				*/
-				String updateTemp = "INSERT INTO monster VALUES('"
+			
+				String updateMon = "INSERT INTO monster VALUES('"
 					    + Mon_NameTF.getText() + "','"
 					    + Mon_TypeTF.getText() + "','"
 					    + DescTF.getText() + "')";
+
+				String updateStats = "INSERT INTO monster_stats VALUES('"
+				    + Mon_NameTF.getText() + "','"
+				    + Mon_DmgTF.getText() + "',"
+				    + Mon_ThtTF.getText() + ")";
+
+				String updateElements = "INSERT INTO elements VALUES('"
+				    + Mon_NameTF.getText() + "',"
+				    + FireTF.getText() + ","
+				    + WaterTF.getText() + ","
+				    + ThunderTF.getText() + ","
+				    + DragonTF.getText() + ","
+				    + IceTF.getText() + ")";
 				
-				stmt.executeUpdate(updateTemp);
+				stmt.executeUpdate(updateMon);
+				stmt.executeUpdate(updateStats);
+				stmt.executeUpdate(updateElements);
 
 			}
 			catch (SQLException sqle)
@@ -276,18 +273,24 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		{		 
 			try
 			{
-				String DeleteQuery = "delete from monster where monster_name = '"
+				//String DeleteMon = "delete from monster where monster_name = '"
+					//	+ Mon_NameTF.getText() + "'";
+				
+				
+				String DeleteStats = "delete from monster where monster_name = '"
 						+ Mon_NameTF.getText() + "'";
 				
-
+				String DeleteElements = "delete from monster where monster_name = '"
+						+ Mon_NameTF.getText() + "'";
 						
-						
-					   // + Mon_NameTF.getText() + "','"
-					   // + Mon_TypeTF.getText() + "','"
-					   // + DescTF.getText() + "')";
+				String DeleteMon = "delete from monster where monster_name = '"
+						+ Mon_NameTF.getText() + "'";
+			
 				
-				stmt.executeUpdate(DeleteQuery);
+				stmt.executeUpdate(DeleteStats);
+				stmt.executeUpdate(DeleteElements);
 
+				stmt.executeUpdate(DeleteMon);
 			}
 			catch (SQLException sqle)
 			{
@@ -307,13 +310,29 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		{		 
 			try
 			{	
-				String updateQuery = "UPDATE monster SET " +
-	                    "Monster_type='" + Mon_TypeTF.getText() + "', " +
-	                    "Monster_desc='" + DescTF.getText() + "' " + 
-	                    "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
-				
-				stmt.executeUpdate(updateQuery);
+				String updateMon = "UPDATE monster SET " +
+		                   "Monster_type='" + Mon_TypeTF.getText() + "', " +
+		                   "Monster_desc='" + DescTF.getText() + "' " + 
+		                   "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
+				/*
+		String updateStats = "UPDATE monster SET " +
+		                     "Monster_dmg='" + Mon_DmgTF.getText() + "', " +
+		                     "Monster_threat='" + Mon_ThtTF.getText() + "' " + 
+		                     "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
 
+*/
+		String updateElements = "UPDATE monster SET " +
+		                        "FireLabel ='" + FireTF.getText() + "', " +
+		                        "Water ='" + WaterTF.getText() + "', " +
+		                        "Thunder ='" + ThunderTF.getText() + "', " +
+		                        "Dragon ='" + DragonTF.getText() + "', " +
+		                        "Ice ='" + IceTF.getText() + "' " + 
+		                        "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
+				
+				stmt.executeUpdate(updateMon);
+				//stmt.executeUpdate(updateStats);
+				stmt.executeUpdate(updateElements);
+						
 			}
 			catch (SQLException sqle)
 			{
@@ -343,7 +362,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		if(target == this.NumLectures){
 			String deptName = this.NumLecturesTF.getText();
 
-			cmd = "select department, count(*) "+  "from details " + "where department = '"  +deptName+"';";
+			 cmd = "SELECT COUNT(*) " + "FROM Monster;";
 
 			System.out.println(cmd);
 			try{					

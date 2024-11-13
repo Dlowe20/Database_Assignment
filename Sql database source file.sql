@@ -8,8 +8,8 @@ use db4_MH;
 
 CREATE TABLE Monster (
     Monster_name VARCHAR(50) NOT NULL,
-    Monster_type VARCHAR(20) NOT NULL,
-    Monster_desc VARCHAR (500) NOT NULL,
+    Monster_type VARCHAR(20),
+    Monster_desc VARCHAR (500),
     PRIMARY KEY (Monster_name)
 );
 
@@ -218,6 +218,8 @@ VALUES ('Odogaron', 'High', 8);
 INSERT INTO Monster_stats (Monster_name, Monster_dmg, Monster_threat)
 VALUES ('Tzitzi-Ya-Ku', 'Low', 5);
 
+-- Checking if all tables were formed correctly by using basic querys --
+
 show databases;
 show tables;
 select * from elements;
@@ -226,49 +228,166 @@ select * from monster_stats;
 select * from monster;
 select count(*) from Elements;
 
+-- created a left join to combine both tables for the java GUI --
+
 SELECT ms.Monster_name, ms.Monster_dmg, ms.Monster_threat, e.Fire, e.Water, e.Thunder, e.Dragon, e.Ice
 FROM monster_stats ms
 LEFT JOIN elements e
 ON ms.Monster_name = e.Monster_name;
 
-INSERT INTO Elements (Monster_name, Fire, Water, Thunder, Dragon, Ice)
-VALUES ('dylan', 80, 50, 30, 70, 20);
+-- This code was a part of testing for procedures and foregin keys specifically error 1452 --
 
 insert into monster (monster_name, monster_type, Monster_desc)
-values ('dylan', 'fly', 'banana');
-
-
+values ('dylan', 'flying wyvern', 'new desc');
 
 select * from monster;
 
-Delete from monster where monster_name = 'd';
-Delete from elements where monster_name = 'dylan';
 Delete from monster where monster_name = 'dylan';
 
+-- The insertion procedure to insert into both tables seperately --
 
-/*
 drop procedure if exists insert_mon;
 
 Delimiter //
 create procedure insert_Mon(
 	in mon_name varchar(50),
+    in mon_type varchar(20),
+    in mon_desc varchar(500),
     in mon_dmg varchar(50),
-    in mon_threat varchar(50),
-    in mon_fire varchar(50),
-    in mon_water varchar(50),
-    in mon_thunder varchar(50),
-    in mon_dragon varchar(50),
-    in mon_ice varchar(50)
+    in mon_threat int(50),
+    in mon_fire int(50),
+    in mon_water int(50),
+    in mon_thunder int(50),
+    in mon_dragon int(50),
+    in mon_ice int(50)
 )
 begin 
 
+declare sql_error tinyint default false;
+			declare continue handler for sqlexception
+            set sql_error = true;
+            start transaction;
+            
+	insert into monster (monster_name, monster_type, monster_desc)
+		values(mon_name, mon_type, mon_desc);
+    
 	insert into monster_stats ( monster_name, monster_dmg, monster_threat)
 		values(mon_name, mon_dmg, mon_threat);
 	
     insert into elements (monster_name, Fire, Water, Thunder, Dragon, Ice)
 		values (mon_name, mon_fire, mon_water, mon_thunder, mon_dragon, mon_ice);
         
+	IF sql_error = false THEN
+        commit;
+    else
+		rollback;
+	end if;
+        
 end//
-*/
 
+call insert_mon('d', '', '', 'high', 5, 5, 5, 5, 5, 5);
 
+-- using the join to check the results of the procedure --
+
+SELECT ms.Monster_name, ms.Monster_dmg, ms.Monster_threat, e.Fire, e.Water, e.Thunder, e.Dragon, e.Ice
+FROM monster_stats ms
+LEFT JOIN elements e
+ON ms.Monster_name = e.Monster_name;
+drop procedure if exists delete_mon;
+
+-- Deletion stored procedure--
+
+Delimiter //
+create procedure delete_Mon(
+	in mon_name varchar(50)
+)
+begin 
+
+declare sql_error tinyint default false;
+			declare continue handler for sqlexception
+            set sql_error = true;
+            start transaction;
+            
+	DELETE FROM Monster 
+    WHERE Monster_name = mon_name;
+    
+	DELETE FROM Elements 
+    WHERE Monster_name = mon_name;
+    
+    DELETE FROM Monster_Stats 
+    WHERE Monster_name = mon_name;
+
+	IF sql_error = false THEN
+        commit;
+    else
+		rollback;
+	end if;
+        
+end//
+
+Delete from monster where monster_name = 'd';
+
+call delete_mon('d');
+
+SELECT ms.Monster_name, ms.Monster_dmg, ms.Monster_threat, e.Fire, e.Water, e.Thunder, e.Dragon, e.Ice
+FROM monster_stats ms
+LEFT JOIN elements e
+ON ms.Monster_name = e.Monster_name;
+drop procedure if exists delete_mon;
+
+-- The update procedure for the table -- 
+
+drop procedure if exists update_mon;
+
+Delimiter //
+create procedure update_Mon(
+	in mon_name varchar(50),
+    in mon_type varchar(20),
+    in mon_desc varchar(500),
+    in mon_dmg varchar(50),
+    in mon_threat int(50),
+    in mon_fire int(50),
+    in mon_water int(50),
+    in mon_thunder int(50),
+    in mon_dragon int(50),
+    in mon_ice int(50)
+)
+begin 
+
+declare sql_error tinyint default false;
+			declare continue handler for sqlexception
+            set sql_error = true;
+            start transaction;
+            
+	 update Monster 
+    set Monster_type = mon_type,
+        Monster_desc = mon_desc
+    where Monster_name = mon_name;
+    
+    update Monster_Stats 
+    set Monster_dmg = mon_dmg,
+        Monster_threat = mon_threat
+    where Monster_name = mon_name;
+    
+    update Elements 
+    set Fire = mon_fire,
+        Water = mon_water,
+        Thunder = mon_thunder,
+        Dragon = mon_dragon,
+        Ice = mon_ice
+    where Monster_name = mon_name;
+		
+	if sql_error = false then
+        commit;
+    else
+		rollback;
+	end if;
+end//
+
+call update_mon('d', '', '', 'bannan', 5, 5, 5, 7, 5, 5);
+
+select ms.Monster_name, ms.Monster_dmg, ms.Monster_threat, e.Fire, e.Water, e.Thunder, e.Dragon, e.Ice
+from monster_stats ms
+left join elements e
+on ms.Monster_name = e.Monster_name;
+drop procedure if exists delete_mon;
