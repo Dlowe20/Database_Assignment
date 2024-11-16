@@ -36,9 +36,6 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 	private JLabel ThunderLabel = new JLabel("Thunder_Res:               ");
 	private JLabel DragonLabel = new JLabel("Dragon_Res:      ");
 	private JLabel IceLabel = new JLabel("Ice_Res:      ");
-	
-	private JLabel Mon_TypeLabel = new JLabel("Monster_type:        ");
-	private JLabel DescLabel = new JLabel("Description:        ");
 
 	
 	private JTextField Mon_NameTF = new JTextField(10);
@@ -65,12 +62,10 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 	private JButton deleteButton  = new JButton("Delete");
 	private JButton clearButton  = new JButton("Clear");
 
-	private JButton  NumLectures = new JButton("NumLecturesForDepartment:");
-	private JTextField NumLecturesTF  = new JTextField(12);
-	private JButton avgAgeDepartment  = new JButton("AvgAgeForDepartment");
-	private JTextField avgAgeDepartmentTF  = new JTextField(12);
-	private JButton ListAllDepartments  = new JButton("ListAllDepartments");
-	private JButton ListAllPositions  = new JButton("ListAllPositions");
+	private JButton NumMonster = new JButton("NumMonstersInEachGroup:");
+	private JButton ListAllMonsters  = new JButton("ListAllMonsters");
+	private JButton ListAllAilments  = new JButton("ListAllAilments");
+	private JButton AvgMonsterThreat  = new JButton("AvgMonsterThreat");
 
 
 
@@ -95,9 +90,6 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 
 		
 		detailsPanel.add(Mon_NameLabel);
-		//detailsPanel.add(Mon_TypeLabel);
-		//detailsPanel.add(DescLabel);
-		
 		detailsPanel.add(Mon_DmgLabel);
 		detailsPanel.add(Mon_ThtLabel);		
 		detailsPanel.add(FireLabel);	
@@ -109,9 +101,6 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		
 		
 		detailsPanel.add(Mon_NameTF);
-		//detailsPanel.add(Mon_TypeTF);
-		//detailsPanel.add(DescTF);
-		
 		detailsPanel.add(Mon_DmgTF);
 		detailsPanel.add(Mon_ThtTF);
 		detailsPanel.add(FireTF);
@@ -126,12 +115,12 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		exportButtonPanel.setLayout(new GridLayout(3,2));
 		exportButtonPanel.setBackground(Color.lightGray);
 		exportButtonPanel.setBorder(BorderFactory.createTitledBorder(lineBorder, "Export Data"));
-		exportButtonPanel.add(NumLectures);
-		exportButtonPanel.add(NumLecturesTF);
-		exportButtonPanel.add(avgAgeDepartment);
-		exportButtonPanel.add(avgAgeDepartmentTF);
-		exportButtonPanel.add(ListAllDepartments);
-		exportButtonPanel.add(ListAllPositions);
+		
+		exportButtonPanel.add(NumMonster);
+		exportButtonPanel.add(ListAllMonsters);
+		exportButtonPanel.add(ListAllAilments);
+		exportButtonPanel.add(AvgMonsterThreat);
+
 		exportButtonPanel.setSize(500, 200);
 		exportButtonPanel.setLocation(3, 300);
 		content.add(exportButtonPanel);
@@ -154,8 +143,10 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		deleteButton.addActionListener(this);
 		clearButton.addActionListener(this);
 
-		this.ListAllDepartments.addActionListener(this);
-		this.NumLectures.addActionListener(this);
+		this.ListAllMonsters.addActionListener(this);
+		this.NumMonster.addActionListener(this);
+		this.ListAllAilments.addActionListener(this);
+		this.AvgMonsterThreat.addActionListener(this);
 
 
 		content.add(insertButton);
@@ -277,10 +268,10 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 					//	+ Mon_NameTF.getText() + "'";
 				
 				
-				String DeleteStats = "delete from monster where monster_name = '"
+				String DeleteStats = "delete from monster_stats where monster_name = '"
 						+ Mon_NameTF.getText() + "'";
 				
-				String DeleteElements = "delete from monster where monster_name = '"
+				String DeleteElements = "delete from elements where monster_name = '"
 						+ Mon_NameTF.getText() + "'";
 						
 				String DeleteMon = "delete from monster where monster_name = '"
@@ -289,12 +280,11 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 				
 				stmt.executeUpdate(DeleteStats);
 				stmt.executeUpdate(DeleteElements);
-
 				stmt.executeUpdate(DeleteMon);
 			}
 			catch (SQLException sqle)
 			{
-				System.err.println("Error with  insert:\n"+sqle.toString());
+				System.err.println("Error with deletion:\n"+sqle.toString());
 			}
 			finally
 			{
@@ -314,29 +304,28 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		                   "Monster_type='" + Mon_TypeTF.getText() + "', " +
 		                   "Monster_desc='" + DescTF.getText() + "' " + 
 		                   "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
-				/*
-		String updateStats = "UPDATE monster SET " +
-		                     "Monster_dmg='" + Mon_DmgTF.getText() + "', " +
-		                     "Monster_threat='" + Mon_ThtTF.getText() + "' " + 
-		                     "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
-
-*/
-		String updateElements = "UPDATE monster SET " +
-		                        "FireLabel ='" + FireTF.getText() + "', " +
-		                        "Water ='" + WaterTF.getText() + "', " +
-		                        "Thunder ='" + ThunderTF.getText() + "', " +
-		                        "Dragon ='" + DragonTF.getText() + "', " +
-		                        "Ice ='" + IceTF.getText() + "' " + 
-		                        "WHERE Monster_name='" + Mon_NameTF.getText() + "'";
 				
+				String updateStats = "UPDATE monster_stats SET " +
+					    "Monster_dmg = '" + Mon_DmgTF.getText() + "', " +
+					    "Monster_threat = '" + Mon_ThtTF.getText() + "' " +
+					    "WHERE Monster_name = '" + Mon_NameTF.getText() + "'"; 
+
+				String updateElements = "UPDATE elements SET " +
+					    "Fire = '" + FireTF.getText() + "', " +
+					    "Water = '" + WaterTF.getText() + "', " + 
+					    "Thunder = '" + ThunderTF.getText() + "', " + 
+					    "Dragon = '" + DragonTF.getText() + "', " +  
+					    "Ice = '" + IceTF.getText() + "' " +
+					    "WHERE Monster_name = '" + Mon_NameTF.getText() + "'";
+		
 				stmt.executeUpdate(updateMon);
-				//stmt.executeUpdate(updateStats);
+				stmt.executeUpdate(updateStats);
 				stmt.executeUpdate(updateElements);
 						
 			}
 			catch (SQLException sqle)
 			{
-				System.err.println("Error with  insert:\n"+sqle.toString());
+				System.err.println("Error with update:\n"+sqle.toString());
 			}
 			finally
 			{
@@ -347,9 +336,9 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		//I have only added functionality of 2 of the button on the lower right of the template
 		///////////////////////////////////////////////////////////////////////////////////
 
-		if(target == this.ListAllDepartments){
+		if(target == this.ListAllMonsters){
 
-			cmd = "select distinct department from details;";
+			cmd = "select * from Monster;";
 
 			try{					
 				rs= stmt.executeQuery(cmd); 	
@@ -359,11 +348,44 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 
 		}
 
-		if(target == this.NumLectures){
-			String deptName = this.NumLecturesTF.getText();
+		if(target == this.ListAllAilments){
+	
+			cmd = "select * from Ailments;";
+	
+			try{					
+				rs= stmt.executeQuery(cmd); 	
+				writeToFile(rs);
+			}
+			catch(Exception e1){e1.printStackTrace();}
+	
+		}
+		
+		if(target == this.AvgMonsterThreat){
 
-			 cmd = "SELECT COUNT(*) " + "FROM Monster;";
+			cmd = "SELECT m.Monster_type, " +
+                    "COUNT(*) as monster_count, " +
+                    "AVG(ms.Monster_threat) as avg_threat_level " +
+                    "FROM Monster m " +
+                    "JOIN Monster_Stats ms ON m.Monster_name = ms.Monster_name " +
+                    "GROUP BY m.Monster_type " +
+                    "ORDER BY avg_threat_level DESC";
 
+			try{					
+				rs= stmt.executeQuery(cmd); 	
+				writeToFile(rs);
+			}
+			catch(Exception e1){e1.printStackTrace();}
+
+		}
+
+		
+		if(target == this.NumMonster){
+
+			 cmd = "SELECT Monster_type, " +
+                     "COUNT(*) as monster_count " +
+                     "FROM Monster " +
+                     "GROUP BY Monster_type";
+			 
 			System.out.println(cmd);
 			try{					
 				rs= stmt.executeQuery(cmd); 	
@@ -371,8 +393,7 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 			}
 			catch(Exception e1){e1.printStackTrace();}
 
-		} 
-
+		}
 	}
 	///////////////////////////////////////////////////////////////////////////
 
@@ -400,3 +421,5 @@ public class JDBCMainWindowContent extends JInternalFrame implements ActionListe
 		catch(Exception e){e.printStackTrace();}
 	}
 }
+
+	///////////////////////////////////////////////////////////////////////////

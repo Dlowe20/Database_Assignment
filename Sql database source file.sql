@@ -391,3 +391,19 @@ from monster_stats ms
 left join elements e
 on ms.Monster_name = e.Monster_name;
 drop procedure if exists delete_mon;
+
+select * from elements;
+
+select monster_type, 
+count(*) as monster_count 
+from monster
+group by monster_type;
+
+select m.monster_type,
+count(*) as monster_count,
+avg(ms.Monster_threat) as avg_threat_level
+from monster m
+join monster_stats ms on m.monster_name = ms.monster_name
+group by m.monster_type
+order by avg_threat_level desc;
+
